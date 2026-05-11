@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Dashboard</title>
+    <link rel="stylesheet" href="src/styles/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1>📈 Trading Dashboard</h1>
+            <input type="text" id="searchInput" placeholder="Search stock (e.g., AAPL)">
+        </div>
+    </nav>
+
+    <main class="container">
+        <div id="stocksGrid" class="stocks-grid">
+            <div class="stock-card loading">
+                <p>Loading stocks...</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="src/app.js"></script>
+</body>
+</html>

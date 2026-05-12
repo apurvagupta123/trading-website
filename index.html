@@ -3,37 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trading Dashboard</title>
+    <title>Groww Clone - Investment Platform</title>
     <link rel="stylesheet" href="src/styles/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <h1>📈 Trading Dashboard</h1>
-            <input type="text" id="searchInput" placeholder="Search stock...">
+            <h1>📈 InvestHub</h1>
+            <div class="nav-right">
+                <input type="text" id="searchInput" placeholder="Search stocks...">
+                <div class="user-menu">₹0.00 | Portfolio</div>
+            </div>
         </div>
     </nav>
 
-    <main class="container">
+    <div class="container">
         <div class="tabs">
-            <button class="tab-btn active" data-tab="watchlist">Watchlist</button>
-            <button class="tab-btn" data-tab="charts">Charts</button>
-            <button class="tab-btn" data-tab="ipo">IPO Calendar</button>
+            <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+            <button class="tab-btn" data-tab="stocks">Stocks</button>
+            <button class="tab-btn" data-tab="portfolio">Portfolio</button>
+            <button class="tab-btn" data-tab="watchlist">Watchlist</button>
+            <button class="tab-btn" data-tab="tools">Tools</button>
+            <button class="tab-btn" data-tab="analysis">Analysis</button>
         </div>
 
-        <div id="watchlist" class="tab-content active">
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <h4>Total Investment</h4>
+                    <p class="stat-value">₹0.00</p>
+                    <small>+0% today</small>
+                </div>
+                <div class="stat-card">
+                    <h4>Current Value</h4>
+                    <p class="stat-value">₹0.00</p>
+                    <small>+0% gain</small>
+                </div>
+                <div class="stat-card">
+                    <h4>Today's Return</h4>
+                    <p class="stat-value">₹0.00</p>
+                    <small>0% return</small>
+                </div>
+                <div class="stat-card">
+                    <h4>Holdings</h4>
+                    <p class="stat-value">0</p>
+                    <small>Active stocks</small>
+                </div>
+            </div>
+            <div class="chart-container">
+                <h3>Portfolio Performance</h3>
+                <canvas id="portfolioChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Stocks Tab -->
+        <div id="stocks" class="tab-content">
             <div id="stocksGrid" class="stocks-grid"></div>
         </div>
 
-        <div id="charts" class="tab-content">
-            <div class="charts-grid" id="chartsGrid"></div>
+        <!-- Portfolio Tab -->
+        <div id="portfolio" class="tab-content">
+            <div class="portfolio-section">
+                <h3>Your Holdings</h3>
+                <div id="holdings" class="holdings-list"></div>
+            </div>
+            <div class="trading-section">
+                <h3>Buy/Sell Stock</h3>
+                <div class="trading-form">
+                    <select id="stockSelect"></select>
+                    <input type="number" id="quantity" placeholder="Quantity" min="1" value="1">
+                    <input type="number" id="price" placeholder="Price per unit" step="0.01">
+                    <button onclick="buyStock()">Buy</button>
+                    <button onclick="sellStock()">Sell</button>
+                </div>
+            </div>
         </div>
 
-        <div id="ipo" class="tab-content">
-            <div id="ipoList" class="ipo-list"></div>
+        <!-- Watchlist Tab -->
+        <div id="watchlist" class="tab-content">
+            <div class="watchlist-actions">
+                <input type="text" id="watchlistSearch" placeholder="Add stock to watchlist...">
+                <button onclick="addToWatchlist()">Add</button>
+            </div>
+            <div id="watchlistItems" class="watchlist-list"></div>
         </div>
-    </main>
+
+        <!-- Tools Tab -->
+        <div id="tools" class="tab-content">
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h4>SIP Calculator</h4>
+                    <input type="number" id="sipAmount" placeholder="Monthly Investment" value="5000">
+                    <input type="number" id="sipReturn" placeholder="Expected Return %" value="12">
+                    <input type="number" id="sipYears" placeholder="Years" value="10">
+                    <button onclick="calculateSIP()">Calculate</button>
+                    <div id="sipResult" class="result"></div>
+                </div>
+                <div class="tool-card">
+                    <h4>Investment Goal</h4>
+                    <input type="number" id="goalAmount" placeholder="Goal Amount" value="1000000">
+                    <input type="number" id="goalReturn" placeholder="Expected Return %" value="12">
+                    <input type="number" id="goalMonths" placeholder="Months" value="120">
+                    <button onclick="calculateGoal()">Calculate</button>
+                    <div id="goalResult" class="result"></div>
+                </div>
+                <div class="tool-card">
+                    <h4>Compound Interest</h4>
+                    <input type="number" id="principal" placeholder="Principal" value="10000">
+                    <input type="number" id="rate" placeholder="Rate %" value="12">
+                    <input type="number" id="years" placeholder="Years" value="5">
+                    <button onclick="calculateCI()">Calculate</button>
+                    <div id="ciResult" class="result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analysis Tab -->
+        <div id="analysis" class="tab-content">
+            <div class="analysis-grid">
+                <div class="stock-detail-card">
+                    <h3 id="detailSymbol">AAPL</h3>
+                    <div id="detailInfo" class="detail-info"></div>
+                    <canvas id="analysisChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="src/app.js"></script>
 </body>

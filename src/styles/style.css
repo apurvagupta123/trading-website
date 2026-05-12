@@ -1,47 +1,51 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
 
-.navbar { background: #fff; border-bottom: 1px solid #ddd; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-.nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-.nav-container h1 { font-size: 24px; color: #333; }
-#searchInput { padding: 10px 15px; border: 1px solid #ddd; border-radius: 6px; width: 300px; font-size: 14px; }
-#searchInput:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+.navbar { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); padding: 16px 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+.nav-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+.nav-container h1 { font-size: 26px; font-weight: 700; color: #1f2937; letter-spacing: -0.5px; }
+#searchInput { padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 8px; background: #f9fafb; color: #1f2937; width: 280px; font-size: 14px; transition: all 0.3s; }
+#searchInput:focus { outline: none; border-color: #667eea; background: #fff; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
 
-.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+.container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
 
-.tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e5e7eb; }
-.tab-btn { background: none; border: none; padding: 12px 20px; font-size: 14px; cursor: pointer; color: #6b7280; border-bottom: 3px solid transparent; transition: all 0.3s; }
-.tab-btn.active { color: #667eea; border-bottom-color: #667eea; }
-.tab-btn:hover { color: #333; }
+.tabs { display: flex; gap: 8px; margin-bottom: 30px; }
+.tab-btn { background: rgba(255,255,255,0.8); border: none; padding: 12px 24px; font-size: 14px; font-weight: 600; cursor: pointer; color: #6b7280; border-radius: 8px; transition: all 0.3s; }
+.tab-btn:hover { background: #fff; }
+.tab-btn.active { background: #fff; color: #667eea; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
 .tab-content { display: none; }
-.tab-content.active { display: block; }
+.tab-content.active { display: block; animation: fadeIn 0.3s; }
 
-.stocks-grid { display: flex; flex-direction: column; gap: 0; background: #fff; border-radius: 8px; border: 1px solid #e5e7eb; overflow: hidden; }
-.stock-card { padding: 16px 20px; border-bottom: 1px solid #e5e7eb; display: grid; grid-template-columns: 100px 200px 120px 120px 200px; gap: 20px; align-items: center; transition: background 0.2s; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.stocks-grid { display: flex; flex-direction: column; gap: 12px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 12px; padding: 0; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+
+.stock-card { padding: 18px 24px; border-bottom: 1px solid #f3f4f6; display: grid; grid-template-columns: 90px 220px 140px 140px 1fr; gap: 20px; align-items: center; transition: all 0.3s; cursor: pointer; }
 .stock-card:last-child { border-bottom: none; }
-.stock-card:hover { background: #f9fafb; }
+.stock-card:hover { background: #f9fafb; transform: translateX(4px); }
 
-.stock-symbol { font-weight: 700; font-size: 16px; color: #1f2937; }
-.stock-name { font-size: 13px; color: #6b7280; }
-.stock-price { font-weight: 600; font-size: 18px; color: #1f2937; }
-.stock-change { padding: 6px 10px; border-radius: 4px; font-weight: 600; font-size: 13px; text-align: center; }
-.change-up { background: #ecfdf5; color: #047857; }
-.change-down { background: #fef2f2; color: #dc2626; }
+.stock-symbol { font-weight: 700; font-size: 18px; color: #1f2937; letter-spacing: -0.5px; }
+.stock-name { font-size: 13px; color: #9ca3af; font-weight: 500; }
+.stock-price { font-weight: 700; font-size: 20px; color: #1f2937; }
+.stock-change { padding: 8px 12px; border-radius: 6px; font-weight: 700; font-size: 13px; text-align: center; }
+.change-up { background: #dcfce7; color: #166534; }
+.change-down { background: #fee2e2; color: #991b1b; }
 
-.charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 20px; }
-.chart-container { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb; }
-.chart-container h3 { margin-bottom: 15px; font-size: 16px; color: #1f2937; }
-.chart-container canvas { max-height: 300px; }
+.chart-container { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); padding: 24px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+.chart-container h3 { margin-bottom: 20px; font-size: 16px; font-weight: 700; color: #1f2937; }
 
-.ipo-list { background: #fff; border-radius: 8px; border: 1px solid #e5e7eb; overflow: hidden; }
-.ipo-item { padding: 16px 20px; border-bottom: 1px solid #e5e7eb; display: grid; grid-template-columns: 150px 200px 120px 150px; gap: 20px; align-items: center; }
+.ipo-list { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+.ipo-item { padding: 18px 24px; border-bottom: 1px solid #f3f4f6; display: grid; grid-template-columns: 130px 250px 120px 1fr; gap: 20px; align-items: center; transition: all 0.3s; }
 .ipo-item:last-child { border-bottom: none; }
-.ipo-date { font-weight: 600; color: #667eea; }
-.ipo-symbol { font-weight: 700; }
-.ipo-price { color: #6b7280; }
+.ipo-item:hover { background: #f9fafb; }
+.ipo-date { font-weight: 700; color: #667eea; }
+.ipo-symbol { font-weight: 700; color: #1f2937; }
+.ipo-price { color: #6b7280; font-size: 13px; }
 
 @media (max-width: 768px) {
+    .nav-container { flex-direction: column; gap: 15px; }
+    #searchInput { width: 100%; }
     .stock-card { grid-template-columns: 80px 1fr 100px 100px; }
-    .charts-grid { grid-template-columns: 1fr; }
+    .tabs { flex-wrap: wrap; }
 }

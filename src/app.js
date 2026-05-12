@@ -54,6 +54,45 @@ function loadStocks(stocks) {
         card.innerHTML = `
             <div class="stock-symbol">${stock.symbol}</div>
             <div class="stock-name">${stock.name}</div>
-            <div class="stock-price">$${stock.price.toFixed(2)}</div>
+            <div class="stock-price">₹${stock.price.toFixed(2)}</div>
             <div class="stock-change ${changeClass}">
                 ${changeSymbol} ${stock.change > 0 ? '+' : ''}${stock.change.toFixed(2)}%
+            </div>
+            <div style="text-align: right; color: #6b7280; font-size: 13px;">
+                ${Math.abs(stock.change * stock.price / 100).toFixed(2)}
+            </div>
+        `;
+        
+        grid.appendChild(card);
+    });
+}
+
+function setupSearch() {
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toUpperCase().trim();
+        
+        if (query === '') {
+            loadStocks(allStocks);
+            return;
+        }
+        
+        const filtered = allStocks.filter(stock => 
+            stock.symbol.includes(query) || stock.name.toUpperCase().includes(query)
+        );
+        
+        loadStocks(filtered);
+    });
+}
+
+function getStockName(symbol) {
+    const names = {
+        'AAPL': 'Apple Inc',
+        'GOOGL': 'Alphabet Inc',
+        'MSFT': 'Microsoft Corp',
+        'TSLA': 'Tesla Inc',
+        'AMZN': 'Amazon Inc',
+        'NVDA': 'NVIDIA Corp'
+    };
+    return names[symbol] || symbol;
+}

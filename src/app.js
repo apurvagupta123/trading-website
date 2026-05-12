@@ -1,4 +1,3 @@
-// Mock stock data (we'll add real prices later)
 const MOCK_STOCKS = [
     { symbol: 'AAPL', name: 'Apple Inc', price: 182.50, change: 2.5 },
     { symbol: 'GOOGL', name: 'Alphabet Inc', price: 140.25, change: -1.2 },
@@ -8,7 +7,6 @@ const MOCK_STOCKS = [
     { symbol: 'NVDA', name: 'NVIDIA Corp', price: 876.42, change: 5.2 },
 ];
 
-// Load stocks on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadStocks(MOCK_STOCKS);
     setupSearch();
@@ -17,6 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
 function loadStocks(stocks) {
     const grid = document.getElementById('stocksGrid');
     grid.innerHTML = '';
+
+    if (stocks.length === 0) {
+        grid.innerHTML = '<div class="stock-card loading"><p>No stocks found</p></div>';
+        return;
+    }
 
     stocks.forEach(stock => {
         const card = document.createElement('div');
@@ -41,10 +44,17 @@ function loadStocks(stocks) {
 function setupSearch() {
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toUpperCase();
+        const query = e.target.value.toUpperCase().trim();
+        
+        if (query === '') {
+            loadStocks(MOCK_STOCKS);
+            return;
+        }
+        
         const filtered = MOCK_STOCKS.filter(stock => 
             stock.symbol.includes(query) || stock.name.toUpperCase().includes(query)
         );
-        loadStocks(filtered.length > 0 ? filtered : MOCK_STOCKS);
+        
+        loadStocks(filtered);
     });
 }

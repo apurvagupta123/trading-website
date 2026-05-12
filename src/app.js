@@ -1,5 +1,4 @@
-import MarketDataService from './services/MarketDataService.js';
-
+const API_KEY = 'qczUHLpgL7HeJGazAePXSrcYsoAIULbC';
 const STOCKS_TO_WATCH = ['AAPL', 'GOOGL', 'MSFT', 'TSLA', 'AMZN', 'NVDA'];
 
 let allStocks = [];
@@ -9,14 +8,39 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupSearch();
 });
 
+async function getStockPrice(symbol) {
+    try {
+        const response = await fetch(
+            `https://api.polygon.io/v1/last/quote/${symbol}?apiKey=${API_KEY}`
+        );
+        const data = await response.json();
+        
+        if (data.status === 'OK' && data.result) {
+            const quote = data.result;
+            return {
+                symbol: symbol,
+                price: quote.last || 0,
+                bid: quote.bid || 0,
+                ask: quote.ask || 0
+            };
+        }
+        return null;
+    } catch (error) {
+        console.error(`Error fetching ${symbol}:`, error);
+        return null;
+    }
+}
+
 async function loadRealPrices() {
     const grid = document.getElementById('stocksGrid');
     grid.innerHTML = '<div class="stock-card loading"><p>Loading real prices...</p></div>';
 
     try {
-        const prices = await MarketDataService.getMultiplePrices(STOCKS_TO_WATCH);
+        const prices = await Promise.all(
+            STOCKS_TO_WATCH.map(symbol => getStockPrice(symbol))
+        );
         
-        allStocks = prices.map(price => {
+        allStocks = prices.filter(p => p !== null).map(price => {
             const previousPrice = price.price * 0.98;
             const change = ((price.price - previousPrice) / previousPrice) * 100;
             
@@ -54,7 +78,7 @@ function loadStocks(stocks) {
         card.innerHTML = `
             <div class="stock-symbol">${stock.symbol}</div>
             <div class="stock-name">${stock.name}</div>
-            <div class="stock-price">₹${stock.price.toFixed(2)}</div>
+            <div class="stock-price">$${stock.price.toFixed(2)}</div>
             <div class="stock-change ${changeClass}">
                 ${changeSymbol} ${stock.change > 0 ? '+' : ''}${stock.change.toFixed(2)}%
             </div>
@@ -72,27 +96,5 @@ function setupSearch() {
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.toUpperCase().trim();
         
-        if (query === '') {
-            loadStocks(allStocks);
-            return;
-        }
-        
-        const filtered = allStocks.filter(stock => 
-            stock.symbol.includes(query) || stock.name.toUpperCase().includes(query)
-        );
-        
-        loadStocks(filtered);
-    });
-}
-
-function getStockName(symbol) {
-    const names = {
-        'AAPL': 'Apple Inc',
-        'GOOGL': 'Alphabet Inc',
-        'MSFT': 'Microsoft Corp',
-        'TSLA': 'Tesla Inc',
-        'AMZN': 'Amazon Inc',
-        'NVDA': 'NVIDIA Corp'
-    };
-    return names[symbol] || symbol;
-}
+        if (query === '')
+eof

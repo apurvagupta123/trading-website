@@ -1,16 +1,39 @@
-const MOCK_STOCKS = [
-    { symbol: 'AAPL', name: 'Apple Inc', price: 182.50, change: 2.5 },
-    { symbol: 'GOOGL', name: 'Alphabet Inc', price: 140.25, change: -1.2 },
-    { symbol: 'MSFT', name: 'Microsoft Corp', price: 378.91, change: 3.1 },
-    { symbol: 'TSLA', name: 'Tesla Inc', price: 242.84, change: -2.8 },
-    { symbol: 'AMZN', name: 'Amazon Inc', price: 175.43, change: 1.9 },
-    { symbol: 'NVDA', name: 'NVIDIA Corp', price: 876.42, change: 5.2 },
-];
+import MarketDataService from './services/MarketDataService.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-    loadStocks(MOCK_STOCKS);
+const STOCKS_TO_WATCH = ['AAPL', 'GOOGL', 'MSFT', 'TSLA', 'AMZN', 'NVDA'];
+
+let allStocks = [];
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadRealPrices();
     setupSearch();
 });
+
+async function loadRealPrices() {
+    const grid = document.getElementById('stocksGrid');
+    grid.innerHTML = '<div class="stock-card loading"><p>Loading real prices...</p></div>';
+
+    try {
+        const prices = await MarketDataService.getMultiplePrices(STOCKS_TO_WATCH);
+        
+        allStocks = prices.map(price => {
+            const previousPrice = price.price * 0.98;
+            const change = ((price.price - previousPrice) / previousPrice) * 100;
+            
+            return {
+                symbol: price.symbol,
+                name: getStockName(price.symbol),
+                price: price.price,
+                change: parseFloat(change.toFixed(2))
+            };
+        });
+
+        loadStocks(allStocks);
+    } catch (error) {
+        console.error('Error loading prices:', error);
+        grid.innerHTML = '<div class="stock-card loading"><p>Error loading prices. Please refresh.</p></div>';
+    }
+}
 
 function loadStocks(stocks) {
     const grid = document.getElementById('stocksGrid');
@@ -34,27 +57,3 @@ function loadStocks(stocks) {
             <div class="stock-price">$${stock.price.toFixed(2)}</div>
             <div class="stock-change ${changeClass}">
                 ${changeSymbol} ${stock.change > 0 ? '+' : ''}${stock.change.toFixed(2)}%
-            </div>
-        `;
-        
-        grid.appendChild(card);
-    });
-}
-
-function setupSearch() {
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toUpperCase().trim();
-        
-        if (query === '') {
-            loadStocks(MOCK_STOCKS);
-            return;
-        }
-        
-        const filtered = MOCK_STOCKS.filter(stock => 
-            stock.symbol.includes(query) || stock.name.toUpperCase().includes(query)
-        );
-        
-        loadStocks(filtered);
-    });
-}
